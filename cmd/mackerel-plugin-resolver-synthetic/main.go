@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
@@ -22,8 +23,8 @@ const (
 	StatusCodeWARNING = 1
 )
 
-// version by Makefile
 var version string
+var commit string
 
 type Opt struct {
 	Version bool   `short:"v" long:"version" description:"Show version"`
@@ -165,14 +166,18 @@ func main() {
 	psr := flags.NewParser(opt, flags.HelpFlag|flags.PassDoubleDash)
 	_, err := psr.Parse()
 	if opt.Version {
-		fmt.Printf(`%s %s
-Compiler: %s %s
-`,
-			os.Args[0],
+		if commit == "" {
+			commit = "dev"
+		}
+		fmt.Printf(
+			"%s-%s\n%s/%s, %s, %s\n",
+			filepath.Base(os.Args[0]),
 			version,
-			runtime.Compiler,
-			runtime.Version())
-		os.Exit(StatusCodeOK)
+			runtime.GOOS,
+			runtime.GOARCH,
+			runtime.Version(),
+			commit)
+		return
 	}
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
