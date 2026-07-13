@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"net"
 	"testing"
 	"time"
 
@@ -72,12 +73,16 @@ func TestResolveOnce(t *testing.T) {
 	err = opt.resolveOnce(ctx, "8.8.8.1", duration("1s"))
 	assert.Error(t, err)
 
-	opt = &Opt{
-		Question: "tcp-fallback.kazeburo.work.",
-		Expect:   "192.168.77.1",
+	// test if can connect to 8.8.8.8 with tcp
+	if conn, err := net.DialTimeout("tcp", "8.8.8.8:53", duration("5s")); err == nil {
+		conn.Close()
+		opt = &Opt{
+			Question: "tcp-fallback.kazeburo.work.",
+			Expect:   "192.168.77.1",
+		}
+		err = opt.resolveOnce(ctx, "8.8.8.8", duration("10s"))
+		assert.NoError(t, err)
 	}
-	err = opt.resolveOnce(ctx, "8.8.8.8", duration("10s"))
-	assert.NoError(t, err)
 
 	ctx, cancel := context.WithTimeout(ctx, duration("3s"))
 	defer cancel()
