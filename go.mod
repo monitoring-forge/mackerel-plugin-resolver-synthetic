@@ -1,26 +1,19 @@
 module github.com/kazeburo/mackerel-plugin-resolver-synthetic
 
-go 1.25.0
+go 1.26.0
 
 require (
 	github.com/jessevdk/go-flags v1.6.1
 	github.com/mackerelio/go-mackerel-plugin v0.1.6
-	github.com/miekg/dns v1.1.72
-	golang.org/x/text v0.40.0
+	github.com/miekg/dns v1.1.73
+	golang.org/x/text v0.42.0
 )
 
-require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/sync v0.22.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
-)
+require go.yaml.in/yaml/v3 v3.0.5 // indirect
 
 require (
-	github.com/mackerelio/golib v1.2.1 // indirect
-	github.com/stretchr/testify v1.11.1
-	golang.org/x/mod v0.37.0 // indirect
-	golang.org/x/net v0.56.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
-	golang.org/x/tools v0.47.0 // indirect
+	github.com/mackerelio/golib v1.2.2 // indirect
+	github.com/stretchr/testify v1.12.1
+	golang.org/x/net v0.57.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
 )
