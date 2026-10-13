@@ -16,43 +16,26 @@ func duration(s string) time.Duration {
 }
 
 func TestResolvTimeout(t *testing.T) {
-	opt := &Opt{
-		Timeout: duration("5s"),
-		Hosts:   []string{"a", "b"},
+	testCases := []struct {
+		timeout   string
+		hosts     []string
+		durations []string
+	}{
+		{"5s", []string{"a", "b"}, []string{"5s", "5s"}},
+		{"1s", []string{"a", "b"}, []string{"1s", "1s"}},
+		{"2s", []string{"a", "b", "c"}, []string{"2s", "1s", "2s"}},
+		{"5s", []string{"a", "b", "c"}, []string{"5s", "3s", "6s"}},
 	}
-	assert.Equal(t, duration("5s"), opt.resolvTimeout(0))
-	assert.Equal(t, duration("5s"), opt.resolvTimeout(1))
-
-	opt = &Opt{
-		Timeout: duration("1s"),
-		Hosts:   []string{"a", "b"},
+	for _, tc := range testCases {
+		assert.Len(t, tc.hosts, len(tc.durations))
+		opt := &Opt{
+			Timeout: duration(tc.timeout),
+			Hosts:   tc.hosts,
+		}
+		for i, expected := range tc.durations {
+			assert.Equal(t, duration(expected), opt.resolvTimeout(i))
+		}
 	}
-	assert.Equal(t, duration("1s"), opt.resolvTimeout(0))
-	assert.Equal(t, duration("1s"), opt.resolvTimeout(1))
-
-	opt = &Opt{
-		Timeout: duration("1s"),
-		Hosts:   []string{"a", "b", "c"},
-	}
-	assert.Equal(t, duration("1s"), opt.resolvTimeout(0))
-	assert.Equal(t, duration("1s"), opt.resolvTimeout(1))
-	assert.Equal(t, duration("1s"), opt.resolvTimeout(2))
-
-	opt = &Opt{
-		Timeout: duration("2s"),
-		Hosts:   []string{"a", "b", "c"},
-	}
-	assert.Equal(t, duration("2s"), opt.resolvTimeout(0))
-	assert.Equal(t, duration("1s"), opt.resolvTimeout(1))
-	assert.Equal(t, duration("2s"), opt.resolvTimeout(2))
-
-	opt = &Opt{
-		Timeout: duration("5s"),
-		Hosts:   []string{"a", "b", "c"},
-	}
-	assert.Equal(t, duration("5s"), opt.resolvTimeout(0))
-	assert.Equal(t, duration("3s"), opt.resolvTimeout(1))
-	assert.Equal(t, duration("6s"), opt.resolvTimeout(2))
 }
 
 func TestResolveOnce(t *testing.T) {

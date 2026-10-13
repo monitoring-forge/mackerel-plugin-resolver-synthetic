@@ -30,7 +30,7 @@ func TestFlagRegexp(t *testing.T) {
 	}
 }
 
-func TestOptValiddator(t *testing.T) {
+func TestOptValidator(t *testing.T) {
 	testFlagRegexp := FlagRegexp{
 		Value:  "^example",
 		Regexp: regexp.MustCompile("^example"),
@@ -50,7 +50,7 @@ func TestOptValiddator(t *testing.T) {
 			Expect:       tc.expect,
 			ExpectRegexp: tc.expectRegexp,
 		}
-		err := opt.Validdator(nil)
+		err := opt.Validator(nil)
 		if !tc.err && err != nil {
 			t.Errorf("unexpected error for expect %q and expect-regexp %q: %v", tc.expect, tc.expectRegexp.Value, err)
 		}
@@ -62,7 +62,7 @@ func TestOptValiddator(t *testing.T) {
 
 func TestEmptyOptValiddator(t *testing.T) {
 	opt := &Opt{}
-	err := opt.Validdator(nil)
+	err := opt.Validator(nil)
 	if err != nil {
 		t.Errorf("unexpected error for empty Opt: %v", err)
 	}

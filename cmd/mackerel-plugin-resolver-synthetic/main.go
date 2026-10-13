@@ -47,7 +47,7 @@ type Opt struct {
 	Deadline     time.Duration `long:"deadline" default:"20s" description:"Deadline timeout"`
 }
 
-func (o *Opt) Validdator(_ []string) error {
+func (o *Opt) Validator(_ []string) error {
 	if o.ExpectRegexp.IsSet() && o.Expect != "" {
 		return fmt.Errorf("expect-regexp is set but expect is also set")
 	}
@@ -61,5 +61,5 @@ func (o *Opt) Run(_ []string) {
 
 func main() {
 	opt := &Opt{}
-	os.Exit(flagrun.Ship(opt, flagrun.Version(version), flagrun.Validator(opt.Validdator)))
+	os.Exit(flagrun.Ship(opt, flagrun.Version(version), flagrun.Validator(opt.Validator)))
 }
