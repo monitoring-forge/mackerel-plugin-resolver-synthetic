@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"slices"
 	"strings"
 	"time"
 
@@ -52,24 +53,21 @@ func (o *Opt) resolveOnce(ctx context.Context, host string, timeout time.Duratio
 	return nil
 }
 
-func expectAny(haystack string, needles []string) bool {
-	if len(needles) == 0 {
+func expectAny(expected string, answers []string) bool {
+	if len(expected) == 0 {
 		return false
 	}
-	for _, needle := range needles {
-		if strings.Contains(haystack, needle) {
-			return true
-		}
-	}
-	return false
+	return slices.ContainsFunc(answers, func(answer string) bool {
+		return strings.Contains(answer, expected)
+	})
 }
 
-func expectMatchAny(reg FlagRegexp, needles []string) bool {
+func expectMatchAny(reg FlagRegexp, answers []string) bool {
 	if !reg.IsSet() {
 		return false
 	}
-	for _, needle := range needles {
-		if reg.Regexp.MatchString(needle) {
+	for _, answer := range answers {
+		if reg.Regexp.MatchString(answer) {
 			return true
 		}
 	}

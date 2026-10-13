@@ -77,7 +77,7 @@ func TestResolveOnce(t *testing.T) {
 
 	// test if can connect to 8.8.8.8 with tcp
 	if conn, err := net.DialTimeout("tcp", "8.8.8.8:53", duration("5s")); err == nil {
-		conn.Close()
+		_ = conn.Close()
 		opt = &Opt{
 			Question: "tcp-fallback.kazeburo.work.",
 			Expect:   "192.168.77.1",
@@ -99,7 +99,9 @@ func TestResolveOnce(t *testing.T) {
 
 func TestExpectAny(t *testing.T) {
 	assert.True(t, expectAny("hello world", []string{"hello world"}))
+	assert.True(t, expectAny("hello", []string{"hello world"}))
 	assert.True(t, expectAny("hello world", []string{"world", "hello world"}))
+	assert.True(t, expectAny("world", []string{"world", "hello world"}))
 	assert.False(t, expectAny("hello world", []string{"foo"}))
 	assert.False(t, expectAny("hello world", []string{}))
 	assert.False(t, expectAny("", []string{"hello"}))
