@@ -19,6 +19,8 @@ type FlagRegexp struct {
 
 func (fr *FlagRegexp) UnmarshalFlag(value string) error {
 	if value == "" {
+		fr.Value = ""
+		fr.Regexp = nil
 		return nil
 	}
 	re, err := regexp.Compile(value)
