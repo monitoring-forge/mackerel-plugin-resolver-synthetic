@@ -1,49 +1,57 @@
 # mackerel-plugin-resolver-synthetic
 
-mackerel plugin for moniting dns server as linux resolver
+DNSサーバーに名前解決を問い合わせ、応答状況と応答時間を監視するMackerelプラグインです。
 
-## Usage
+## インストール
 
-```
-# good
-% ./mackerel-plugin-resolver-synthetic --timeout 5s -H 8.8.4.4 -H 8.8.8.8  -Q example.com
-resolver-synthetic.service.available     100     1687868462
-resolver-synthetic.rtt.milliseconds      16      1687868462
+`mkr`を使ってGitHubからインストールします。
 
-# one of them is alive
-% ./mackerel-plugin-resolver-synthetic --timeout 5s -H 198.51.100.1 -H 198.51.100.2 -H 8.8.8.8  -Q example.com 
-2023/06/27 21:20:08 failed to resolv on 198.51.100.1 with timeout 5.000000s: read udp 192.168.68.110:58507->198.51.100.1:53: i/o timeout
-2023/06/27 21:20:11 failed to resolv on 198.51.100.1 with timeout 3.000000s: read udp 192.168.68.110:49304->198.51.100.1:53: i/o timeout
-resolver-synthetic.service.available     100     1687868403
-resolver-synthetic.rtt.milliseconds      8023    1687868403
-
-# all dead
-
-% ./mackerel-plugin-resolver-synthetic --timeout 5s -H 198.51.100.1 -H 198.51.100.2 -Q example.com 
-2023/06/27 21:21:56 failed to resolv on 198.51.100.1 with timeout 5.000000s: read udp 192.168.68.110:51016->198.51.100.1:53: i/o timeout
-2023/06/27 21:22:01 failed to resolv on 198.51.100.2 with timeout 5.000000s: read udp 192.168.68.110:59771->198.51.100.2:53: i/o timeout
-2023/06/27 21:22:06 failed to resolv on 198.51.100.1 with timeout 5.000000s: read udp 192.168.68.110:53296->198.51.100.1:53: i/o timeout
-2023/06/27 21:22:11 failed to resolv on 198.51.100.2 with timeout 5.000000s: read udp 192.168.68.110:50395->198.51.100.2:53: i/o timeout
-resolver-synthetic.service.available     0       1687868511
-resolver-synthetic.rtt.milliseconds      20002   1687868511
+```sh
+mkr plugin install github.com/kazeburo/mackerel-plugin-resolver-synthetic
 ```
 
-## Help
+## 使い方
 
+コマンドを直接実行すると、標準出力にMackerel形式のメトリックを出力します。
+
+```sh
+mackerel-plugin-resolver-synthetic --hostname 8.8.8.8 --hostname 8.8.4.4 --question example.com
 ```
-Usage:
-  mackerel-plugin-resolver-synthetic [OPTIONS]
 
-Application Options:
-  -v, --version   Show version
-      --prefix=   Metric key prefix (default: resolver)
-  -H, --hostname= DNS server hostnames (default: 127.0.0.1)
-  -Q, --question= Question hostname (default: example.com.)
-  -E, --expect=   Expect string in result
-      --timeout=  Timeout (default: 5s)
-      --attempts= Number of resoluitions (default: 2)
-      --deadline= Deadline timeout (default: 20s)
+Mackerel Agentから定期実行する場合は、エージェントの設定ファイルにプラグインを登録します。必要に応じてコマンドにオプションを追加してください。
 
-Help Options:
-  -h, --help      Show this help message
+```toml
+[plugin.metrics.resolver-synthetic]
+command = "mackerel-plugin-resolver-synthetic --hostname 8.8.8.8 --hostname 8.8.4.4 --question example.com"
+```
+
+## オプション
+
+| オプション | 説明 | デフォルト |
+| --- | --- | --- |
+| `-H`, `--hostname` | 問い合わせ先のDNSサーバー。複数指定できます。 | `127.0.0.1` |
+| `-Q`, `--question` | Aレコードを問い合わせるホスト名。末尾の `.` は省略できます。 | `example.com.` |
+| `-E`, `--expect` | DNS応答のAレコードに含まれることを確認する文字列。 | なし |
+| `-R`, `--expect-regexp` | DNS応答のAレコードに一致することを確認する正規表現。`--expect` とは同時に指定できません。 | なし |
+| `--timeout` | DNS問い合わせのタイムアウト。問い合わせ先が複数の場合、問い合わせ順に応じて各問い合わせの値が調整されます。 | `5s` |
+| `--attempts` | DNSサーバーの一覧を最大何周するか。いずれかの問い合わせが成功すると終了します。 | `2` |
+| `--deadline` | 一連の問い合わせ全体に対する制限時間。 | `20s` |
+| `--prefix` | メトリックキーのprefix。メトリック名には末尾に `-synthetic` が付加されます。 | `resolver` |
+| `-v`, `--version` | バージョンを表示します。 | - |
+| `-h`, `--help` | ヘルプを表示します。 | - |
+
+## 出力メトリック
+
+出力は `メトリック名 値 Unix時刻` の形式です。prefixのデフォルトは `resolver-synthetic` です。
+
+| メトリック | 単位 | 意味 |
+| --- | --- | --- |
+| `resolver-synthetic.service.available` | パーセント | DNS応答が成功し、指定した `--expect` または `--expect-regexp` の条件も満たした場合は `100`、それ以外は `0`。 |
+| `resolver-synthetic.rtt.milliseconds` | ミリ秒 | 成功または処理終了までに実施したDNS問い合わせの所要時間の合計。失敗した問い合わせの時間も含みます。 |
+
+問い合わせに失敗した場合、詳細は標準エラーにログ出力されます。
+
+## ライセンス
+
+[MIT License](LICENSE)
 ```
