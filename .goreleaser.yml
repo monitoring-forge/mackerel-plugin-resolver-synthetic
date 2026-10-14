@@ -10,5 +10,5 @@ archives:
     name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
 release:
   github:
-    owner: kazeburo
+    owner: monitoring-forge
     name: mackerel-plugin-resolver-synthetic

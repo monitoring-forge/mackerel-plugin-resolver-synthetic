@@ -70,11 +70,11 @@ func TestResolveOnce(t *testing.T) {
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, duration("3s"))
-	defer cancel()
 	opt = &Opt{
 		Question: "example.com.",
 	}
-	err = opt.resolveOnce(ctx, "8.8.8.1", duration("10s"))
+	cancel()
+	err = opt.resolveOnce(ctx, "192.0.2.42", duration("10s"))
 	assert.Error(t, err)
 	assert.NotNil(t, ctx.Err())
 

@@ -7,7 +7,7 @@ DNSサーバーに名前解決を問い合わせ、応答状況と応答時間�
 `mkr`を使ってGitHubからインストールします。
 
 ```sh
-mkr plugin install github.com/kazeburo/mackerel-plugin-resolver-synthetic
+mkr plugin install github.com/monitoring-forge/mackerel-plugin-resolver-synthetic
 ```
 
 ## 使い方
