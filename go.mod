@@ -1,4 +1,4 @@
-module github.com/kazeburo/mackerel-plugin-resolver-synthetic
+module github.com/monitoring-forge/mackerel-plugin-resolver-synthetic
 
 go 1.26.0
 
