@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.0.6](https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/compare/v0.0.5...v0.0.6) - 2026-10-14
+
+- repo transfer by @kazeburo in https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/pull/24
+
 ## [v0.0.5](https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/compare/v0.0.4...v0.0.5) - 2026-10-13
 
 - go: bump golang.org/x/text from 0.35.0 to 0.40.0 in the dependencies group by @dependabot[bot] in https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/pull/5
