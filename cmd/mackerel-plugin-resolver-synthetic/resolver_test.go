@@ -74,7 +74,7 @@ func TestResolveOnce(t *testing.T) {
 	opt = &Opt{
 		Question: "example.com.",
 	}
-	err = opt.resolveOnce(ctx, "8.8.8.1", duration("10s"))
+	err = opt.resolveOnce(ctx, "192.0.2.42", duration("10s"))
 	assert.Error(t, err)
 	assert.NotNil(t, ctx.Err())
 
