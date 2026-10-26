@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.0.7](https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/compare/v0.0.6...v0.0.7) - 2026-10-26
+
+- ci: bump Songmu/tagpr from 1.21.1 to 1.21.2 in the tagpr group by @dependabot[bot] in https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/pull/26
+- ci: bump the dependencies group with 2 updates by @dependabot[bot] in https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/pull/27
+- ci: bump Songmu/tagpr from 1.21.2 to 1.21.3 in the tagpr group by @dependabot[bot] in https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/pull/30
+
 ## [v0.0.6](https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/compare/v0.0.5...v0.0.6) - 2026-10-14
 
 - repo transfer by @kazeburo in https://github.com/monitoring-forge/mackerel-plugin-resolver-synthetic/pull/24
